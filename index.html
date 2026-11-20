@@ -1627,6 +1627,24 @@ if(MODE==='pasta') (async ()=>{
   catch(e){ pastaHandle=null; pastaUI(); }
 })();
 </script>
-<script>if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }</script>
+<script>
+const APP_VER='a61f99780a';
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js').then(r=>{ document.addEventListener('visibilitychange',()=>{ if(!document.hidden) r.update().catch(()=>{}); }); }).catch(()=>{}); }
+// Procura versão nova ao abrir e ao voltar para o app; se houver, guarda e recarrega na hora (os dados ficam salvos no aparelho).
+let cgChecando=false, cgUltimo=0;
+async function cgVerAtualizacao(){
+  if(cgChecando || !navigator.onLine || Date.now()-cgUltimo<20000) return; cgChecando=true; cgUltimo=Date.now();
+  try{
+    const r=await fetch('./index.html?nc='+Date.now(),{cache:'no-store'}); if(!r.ok) return;
+    const t=await r.text(); const m=t.match(/APP_VER='([0-9a-f]+)'/);
+    if(!m || m[1]===APP_VER) return;
+    if(window.caches){ for(const k of await caches.keys()){ if(k.startsWith('gastos-')){ const c=await caches.open(k); const resp=()=>new Response(t,{headers:{'Content-Type':'text/html; charset=utf-8'}}); await c.put('./index.html',resp()); await c.put('./',resp()); } } }
+    location.reload();
+  }catch(e){} finally{ cgChecando=false; }
+}
+window.addEventListener('load',()=>setTimeout(cgVerAtualizacao,300));
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden) cgVerAtualizacao(); });
+window.addEventListener('pageshow',e=>{ if(e.persisted) cgVerAtualizacao(); });
+</script>
 </body>
 </html>
