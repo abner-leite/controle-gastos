@@ -1589,7 +1589,14 @@ btnPasta.onclick = async ()=>{
   }catch(e){ if(e.name!=='AbortError') toast('Não consegui ler a pasta: '+e.message); }
 };
 btnTrocar.onclick = async ()=>{ pastaHandle=null; if(temFS) await btnPasta.onclick(); else pastaInput.click(); };
-pastaInput.onchange = async ()=>{ const files=[...pastaInput.files].filter(f=>EXT.test(f.name)); pastaInput.value=''; await importar(files,true,'pasta escolhida'); };
+pastaInput.onchange = async ()=>{
+  const todos=[...pastaInput.files]; const files=todos.filter(f=>EXT.test(f.name) || (MODE!=='pasta' && /\.json$/i.test(f.name)));
+  const nomePasta = (todos[0] && todos[0].webkitRelativePath || '').split('/')[0] || 'pasta escolhida';
+  pastaInput.value='';
+  if(!files.length){ toast('Nenhum arquivo .ofx, .csv ou .json nessa pasta'); return; }
+  await importar(files,true,nomePasta);
+  if(MODE!=='pasta'){ try{ localStorage.setItem('cg-ultima-pasta', JSON.stringify({nome:nomePasta, em:new Date().toISOString()})); }catch(e){} pastaWebUI(); }
+};
 
 // ---------- início ----------
 if(MODE==='pasta'){
@@ -1598,7 +1605,14 @@ if(MODE==='pasta'){
 } else {
   lblArq.firstChild.textContent = 'Carregar arquivos';
   btnBackup.hidden = false;
-  banner.innerHTML = '<b>Comece por aqui:</b> toque em <b>Carregar arquivos</b> e escolha, de uma vez, as faturas do cartão (OFX), os extratos da conta (OFX ou CSV) e, se tiver, o seu <b>controle-dados.json</b> (regras, contas programadas e lançamentos). Os dados ficam só neste aparelho. Use <b>Exportar dados</b> de vez em quando para ter um backup.';
+  // no celular/web: escolher a pasta inteira (iPhone com iOS 18.4 ou mais novo); o navegador não deixa lembrar a pasta, então é um toque por vez
+  btnPasta.hidden = false;
+  btnPasta.onclick = ()=>pastaInput.click();
+  window.pastaWebUI = ()=>{ let u=null; try{ u = JSON.parse(localStorage.getItem('cg-ultima-pasta')); }catch(e){}
+    btnPasta.textContent = u ? `📁 Ler pasta de novo` : '📁 Escolher pasta';
+    btnPasta.title = u ? `Última: “${u.nome}” em ${new Date(u.em).toLocaleString('pt-BR')}` : 'Escolha a pasta com os OFX/CSV e o controle-dados.json'; };
+  pastaWebUI();
+  banner.innerHTML = '<b>Comece por aqui:</b> toque em <b>📁 Escolher pasta</b> e escolha a pasta (no app Arquivos ou no iCloud Drive) onde estão os seus extratos, ou em <b>Carregar arquivos</b> e escolha, de uma vez, as faturas do cartão (OFX), os extratos da conta (OFX ou CSV) e, se tiver, o seu <b>controle-dados.json</b> (regras, contas programadas e lançamentos). Os dados ficam só neste aparelho. Use <b>Exportar dados</b> de vez em quando para ter um backup.';
 }
 btnBackup.onclick = async ()=>{
   const blob = new Blob([JSON.stringify(dadosObj(),null,2)], {type:'application/json'});
