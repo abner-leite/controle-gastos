@@ -12,8 +12,6 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
 <title>Controle de Gastos</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#f6f5f2;--card:#fff;--ink:#1d1d1b;--mute:#6f6c66;--line:#e6e3dd;--soft:#f0eee9;
@@ -25,7 +23,7 @@
   --fixo:#91a7ff;--fixo-bg:#22284a;--var:#ffa94d;--var-bg:#3d2616;--ign:#adb5bd;--ign-bg:#2a2c2e;--accent:#c084fc;
 }}
 *{box-sizing:border-box}
-body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
 header{padding:22px 28px 0;display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between}
 h1{font-size:20px;margin:0 0 4px;font-weight:700;letter-spacing:-.01em}
 .sub{color:var(--mute);font-size:13px}
@@ -66,7 +64,7 @@ tr.changed td{background:color-mix(in srgb,var(--accent) 7%,transparent)}
 select.tipo{width:105px}
 select.caixa{width:190px;max-width:100%}
 .scroll{overflow-x:auto}
-.rule{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--mute);max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rule{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;color:var(--mute);max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .manual{color:var(--accent)}
 .bars .row{margin:10px 0}
 .bars .top{display:flex;justify-content:space-between;font-size:13px;gap:8px}
@@ -75,14 +73,14 @@ select.caixa{width:190px;max-width:100%}
 .bars .track i{display:block;height:100%}
 .legend{display:flex;gap:14px;font-size:12px;color:var(--mute);margin-bottom:6px}
 .legend b{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
-.rx{font-family:'JetBrains Mono',monospace;font-size:12px;width:100%}
+.rx{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;width:100%}
 .rx.bad{border-color:#e03131}
 .icon{background:none;border:0;cursor:pointer;color:var(--mute);font-size:15px;padding:2px 5px;border-radius:5px}
 .icon:hover{background:var(--soft);color:var(--ink)}
 .drawer{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;z-index:9;padding:20px}
 .drawer.on{display:flex}
 .drawer .card{width:min(720px,100%);max-height:85vh;display:flex;flex-direction:column;gap:10px}
-.drawer textarea{flex:1;min-height:320px;font-family:'JetBrains Mono',monospace;font-size:12px;border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--soft);color:var(--ink)}
+.drawer textarea{flex:1;min-height:320px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--soft);color:var(--ink)}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:9px;font-size:13px;opacity:0;transition:.2s;pointer-events:none}
 .toast.on{opacity:1}
 .empty{color:var(--mute);padding:20px;text-align:center}
